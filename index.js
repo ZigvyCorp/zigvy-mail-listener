@@ -97,7 +97,7 @@ function parseUnread() {
           var attributes = null;
           var emlbuffer = new Buffer('');
 
-          parser.on("end", function(mail) {
+          parser.on("data", function(mail) {
             mail.eml = emlbuffer.toString('utf-8');
             if (!self.mailParserOptions.streamAttachments && mail.attachments && self.attachments) {
               async.each(mail.attachments, function( attachment, callback) {
