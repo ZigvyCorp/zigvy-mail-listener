@@ -2,6 +2,8 @@ var Imap = require('imap');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var MailParser = require("mailparser").MailParser;
+const simpleParser = require('mailparser').simpleParser;
+
 var fs = require("fs");
 var path = require('path');
 var async = require('async');
@@ -96,28 +98,11 @@ function parseUnread() {
           var parser = new MailParser(self.mailParserOptions);
           var attributes = null;
           var emlbuffer = new Buffer('');
-
           parser.on("data", function(mail) {
             mail.eml = emlbuffer.toString('utf-8');
-            if (!self.mailParserOptions.streamAttachments && mail.attachments && self.attachments) {
-              async.each(mail.attachments, function( attachment, callback) {
-                fs.writeFile(self.attachmentOptions.directory + attachment.generatedFileName, attachment.content, function(err) {
-                  if(err) {
-                    self.emit('error', err);
-                    callback()
-                  } else {
-                    attachment.path = path.resolve(self.attachmentOptions.directory + attachment.generatedFileName);
-                    self.emit('attachment', attachment);
-                    callback()
-                  }
-                });
-              }, function(err){
-                self.emit('mail', mail, seqno, attributes);
-                callback()
-              });
-            } else {
-              self.emit('mail',mail,seqno,attributes);
-            }
+            simpleParser( mail.eml, (err, mail)=>{
+              self.emit('mail', mail, seqno, attributes);
+            })
           });
           parser.on("attachment", function (attachment) {
             self.emit('attachment', attachment);
