@@ -36,7 +36,8 @@ function MailListener(options) {
     tlsOptions: options.tlsOptions || {},
     connTimeout: options.connTimeout || null,
     authTimeout: options.authTimeout || null,
-    debug: options.debug || null
+    debug: options.debug || null,
+    keepalive: options.keepalive || true
   });
 
   this.imap.once('ready', imapReady.bind(this));
