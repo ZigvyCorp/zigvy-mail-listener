@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dinhnguyentrunghoa/mail-listener2.git"
+    "url": "https://github.com/ZigvyCorp/zigvy-mail-listener.git"
   },
-  "homepage": "https://github.com/dinhnguyentrunghoa/mail-listener2",
+  "homepage": "https://github.com/ZigvyCorp/zigvy-mail-listener",
   "keywords": [
     "mail",
     "job",
@@ -21,9 +21,9 @@
     "email parser"
   ],
   "author": {
-    "name": "Hoa Dinh ",
-    "email": "dinhnguyentrunghoa@gmail.com",
-    "url": "http://zigvy.com/"
+    "name": "Hau Nguyen",
+    "email": "nltrunghau@gmail.com",
+    "url": "https://zigvy.com/"
   },
   "license": "MIT"
 }
