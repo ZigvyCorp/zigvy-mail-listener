@@ -62,9 +62,6 @@ function imapReady() {
       self.emit('error', err);
     } else {
       self.emit('server:connected');
-      if (self.fetchUnreadOnStart) {
-        parseUnread.call(self);
-      }
       var listener = imapMail.bind(self);
       self.imap.on('mail', listener);
       self.imap.on('update', listener);
