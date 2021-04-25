@@ -8,8 +8,6 @@ var fs = require("fs");
 var path = require('path');
 var async = require('async');
 
-module.exports = MailListener;
-
 function MailListener(options) {
   this.markSeen = !! options.markSeen;
   this.mailbox = options.mailbox || "INBOX";
@@ -47,14 +45,6 @@ function MailListener(options) {
 
 util.inherits(MailListener, EventEmitter);
 
-MailListener.prototype.start = function() {
-  this.imap.connect();
-};
-
-MailListener.prototype.stop = function() {
-  this.imap.end();
-};
-
 function imapReady() {
   var self = this;
   this.imap.openBox(this.mailbox, false, function(err, mailbox) {
@@ -62,6 +52,9 @@ function imapReady() {
       self.emit('error', err);
     } else {
       self.emit('server:connected');
+      if (self.fetchUnreadOnStart) {
+        parseUnread.call(self);
+      }
       var listener = imapMail.bind(self);
       self.imap.on('mail', listener);
       self.imap.on('update', listener);
@@ -129,3 +122,20 @@ function parseUnread() {
     }
   });
 }
+MailListener.prototype.start = function() {
+  this.imap.connect();
+};
+
+MailListener.prototype.stop = function() {
+  this.imap.end();
+};
+
+MailListener.prototype.imapMail = imapMail;
+
+MailListener.prototype.imapClose = imapClose;
+
+MailListener.prototype.imapError = imapError;
+
+MailListener.prototype.imapReady = imapReady;
+
+module.exports = MailListener;
